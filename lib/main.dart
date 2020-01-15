@@ -110,14 +110,14 @@ class _MyHomePageState extends State<MyHomePage> {
                     decoration: BoxDecoration(
                         color: _color,
                         boxShadow: _getBoxShadow,
-                        gradient: LinearGradient(
+                        gradient: _gradient?LinearGradient(
                           stops: [0, 1],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                           colors: _isConcave
                               ? [getColor1, getColor2]
                               : [getColor2, getColor1],
-                        ),
+                        ):null,
                         borderRadius: BorderRadius.all(
                             Radius.circular(_radius.toDouble()))),
                   ),
@@ -138,14 +138,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 decoration: BoxDecoration(
                     color: _color,
                     boxShadow: _getBoxShadow,
-                    gradient: LinearGradient(
+                    gradient: _gradient?LinearGradient(
                       stops: [0, 1],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: _isConcave
                           ? [getColor1, getColor2]
                           : [getColor2, getColor1],
-                    ),
+                    ):null,
                     borderRadius: BorderRadius.all(Radius.circular(25))),
                 child: Column(
                   children: <Widget>[
