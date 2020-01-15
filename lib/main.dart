@@ -219,7 +219,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             decoration: InputDecoration(
                                 counterText: "",
                                 contentPadding: EdgeInsets.all(8),
-                                hintText: "#ffffff",
+                                hintText: "ffffff",
                                 hintStyle: TextStyle(
                                     color: Colors.grey[500],
                                     fontWeight: FontWeight.w300,
