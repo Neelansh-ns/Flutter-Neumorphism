@@ -229,7 +229,11 @@ class _MyHomePageState extends State<MyHomePage> {
                             maxLength: 6,
                             maxLines: 1,
                             keyboardType: TextInputType.text,
-                            style: getTextStyle,
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontStyle: FontStyle.normal,
+                                fontWeight: FontWeight.w300,
+                                color: HexColor.darkColour),
                           ),
                         )
                       ],
