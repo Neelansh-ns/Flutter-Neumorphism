@@ -236,10 +236,11 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: SliderTheme(
                             data: _sliderTheme,
                             child: Slider(
-                              value: _intensity.toDouble(),
+                              value: _intensity,
                               min: 0.01,
                               max: 0.6,
-                              label: "$_intensity",
+                              divisions: 59,
+                              label: "${_intensity.toStringAsPrecision(2).substring(0,4)}",
                               onChanged: (value) {
                                 setState(() {
                                   _intensity = value;
