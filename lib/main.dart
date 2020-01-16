@@ -339,7 +339,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: Text(
-                            "Intesnsity",
+                            "Intensity",
                             style: getTextStyle,
                           ),
                         ),
