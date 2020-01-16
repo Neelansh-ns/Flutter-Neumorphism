@@ -42724,7 +42724,7 @@ f=a0.gkj()
 k=a0.f
 k.toString
 k=T.c8(H.d([new T.bf(C.aE,e,a1),T.eO(new Q.fh(f,R.rA(50,H.c(k),50,5,new F.P0(a0),k),a1))],i),C.af,C.N)
-f=L.bZ("Intesnsity",a1,a1,a1,a0.gfh(),a1)
+f=L.bZ("Intensity",a1,a1,a1,a0.gfh(),a1)
 e=a0.gkj()
 o=a0.z
 o=T.c8(H.d([new T.bf(C.aE,f,a1),T.eO(new Q.fh(e,R.rA(59,C.f.a9(J.Z6(o,2),0,4),0.6,0.01,new F.P1(a0),o),a1))],i),C.af,C.N)
