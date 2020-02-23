@@ -1,13 +1,14 @@
-import 'dart:ui';
-import 'package:flutter/material.dart';
 import 'dart:math';
-import 'package:flutter_neumorphism/color_converter.dart';
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:flutter_neumorphism/color_converter.dart';
+import 'package:flutter_neumorphism/widgets/slider_controller.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -65,9 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    if (HexColor.isLight(Color(0xffc6dfd3))) {
-      print("hahahahaha");
-    }
+    if (HexColor.isLight(Color(0xffc6dfd3))) {}
 
     print(_getShadowColor1);
     print(_getShadowColor2);
@@ -100,13 +99,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                 stops: [0, 1],
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
-                                colors: _isConcave
-                                    ? [getColor1, getColor2]
-                                    : [getColor2, getColor1],
+                                colors:
+                                    _isConcave ? [getColor1, getColor2] : [getColor2, getColor1],
                               )
                             : null,
-                        borderRadius: BorderRadius.all(
-                            Radius.circular(_radius.toDouble()))),
+                        borderRadius: BorderRadius.all(Radius.circular(_radius.toDouble()))),
                   ),
                 ),
               ),
@@ -124,9 +121,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             stops: [0, 1],
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
-                            colors: _isConcave
-                                ? [getColor1, getColor2]
-                                : [getColor2, getColor1],
+                            colors: _isConcave ? [getColor1, getColor2] : [getColor2, getColor1],
                           )
                         : null,
                     borderRadius: BorderRadius.all(Radius.circular(25))),
@@ -163,21 +158,13 @@ class _MyHomePageState extends State<MyHomePage> {
 //                          color: _color,
                             decoration: BoxDecoration(boxShadow: [
                               BoxShadow(
-                                  color: HexColor.darkColour,
-                                  offset: Offset(2, 0),
-                                  blurRadius: 5),
+                                  color: HexColor.darkColour, offset: Offset(2, 0), blurRadius: 5),
                               BoxShadow(
-                                  color: HexColor.darkColour,
-                                  offset: Offset(-2, 0),
-                                  blurRadius: 5),
+                                  color: HexColor.darkColour, offset: Offset(-2, 0), blurRadius: 5),
                               BoxShadow(
-                                  color: HexColor.darkColour,
-                                  offset: Offset(0, 2),
-                                  blurRadius: 5),
+                                  color: HexColor.darkColour, offset: Offset(0, 2), blurRadius: 5),
                               BoxShadow(
-                                  color: HexColor.darkColour,
-                                  offset: Offset(0, -2),
-                                  blurRadius: 5),
+                                  color: HexColor.darkColour, offset: Offset(0, -2), blurRadius: 5),
                             ], color: _color),
                           ),
                         ),
@@ -193,28 +180,19 @@ class _MyHomePageState extends State<MyHomePage> {
                           width: 100,
                           decoration: BoxDecoration(boxShadow: [
                             BoxShadow(
-                                color: HexColor.darkColour,
-                                offset: Offset(2, 0),
-                                blurRadius: 5),
+                                color: HexColor.darkColour, offset: Offset(2, 0), blurRadius: 5),
                             BoxShadow(
-                                color: HexColor.darkColour,
-                                offset: Offset(-2, 0),
-                                blurRadius: 5),
+                                color: HexColor.darkColour, offset: Offset(-2, 0), blurRadius: 5),
                             BoxShadow(
-                                color: HexColor.darkColour,
-                                offset: Offset(0, 2),
-                                blurRadius: 5),
+                                color: HexColor.darkColour, offset: Offset(0, 2), blurRadius: 5),
                             BoxShadow(
-                                color: HexColor.darkColour,
-                                offset: Offset(0, -2),
-                                blurRadius: 5),
+                                color: HexColor.darkColour, offset: Offset(0, -2), blurRadius: 5),
                           ], color: Colors.white),
                           child: TextFormField(
                             controller: _controller,
                             onChanged: (value) {
                               RegExp hexColor = RegExp(r'^#?([0-9a-fA-F]{6})$');
-                              if (hexColor.hasMatch(value))
-                                changeColor(HexColor(value));
+                              if (hexColor.hasMatch(value)) changeColor(HexColor(value));
                             },
                             decoration: InputDecoration(
                                 counterText: "",
@@ -238,158 +216,84 @@ class _MyHomePageState extends State<MyHomePage> {
                         )
                       ],
                     ),
-                    Row(
-                      children: <Widget>[],
+                    SliderController(
+                      title: "Size",
+                      min: 5,
+                      max: 400,
+                      divisions: 400,
+                      darkMode: _darkMode,
+                      sideLength: _sideLength,
+                      label: "$_sideLength",
+                      value: _sideLength.toDouble(),
+                      onChanged: (value) {
+                        setState(() {
+                          _sideLength = value.round();
+                          _shadowDistance = [5, (_sideLength / 10).round()].reduce(max);
+                          _blurRadius = _shadowDistance * 2;
+                          _radius = [_radius, (_sideLength / 2).round()].reduce(min);
+                        });
+                      },
                     ),
-                    Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Text(
-                            "Size",
-                            style: getTextStyle,
-                          ),
-                        ),
-                        Expanded(
-                          child: SliderTheme(
-                            data: _sliderTheme,
-                            child: Slider(
-                              value: _sideLength.toDouble(),
-                              min: 5,
-                              max: 400,
-                              divisions: 400,
-                              label: "$_sideLength",
-                              onChanged: (value) {
-                                setState(() {
-                                  _sideLength = value.round();
-                                  _shadowDistance = [
-                                    5,
-                                    (_sideLength / 10).round()
-                                  ].reduce(max);
-                                  _blurRadius = _shadowDistance * 2;
-                                  _radius = [_radius, (_sideLength / 2).round()]
-                                      .reduce(min);
-                                });
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
+                    SliderController(
+                      title: "Radius",
+                      min: 0,
+                      max: (_sideLength / 2).round().toDouble(),
+                      label: "$_radius",
+                      sideLength: _sideLength,
+                      darkMode: _darkMode,
+                      divisions: (_sideLength / 2).round(),
+                      onChanged: (value) {
+                        setState(() {
+                          _radius = value.round();
+                        });
+                      },
+                      value: _radius.toDouble(),
                     ),
-                    Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Text(
-                            "Radius",
-                            style: getTextStyle,
-                          ),
-                        ),
-                        Expanded(
-                          child: SliderTheme(
-                            data: _sliderTheme,
-                            child: Slider(
-                              value: _radius.toDouble(),
-                              min: 0,
-                              label: "$_radius",
-                              divisions: (_sideLength / 2).round(),
-                              max: (_sideLength / 2).round().toDouble(),
-                              onChanged: (value) {
-                                setState(() {
-                                  _radius = value.round();
-//                          print("$_radius ${_sideLength/2}");
-                                });
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
+                    SliderController(
+                      title: "Distance",
+                      min: 5,
+                      max: 50,
+                      label: "$_shadowDistance",
+                      sideLength: _sideLength,
+                      darkMode: _darkMode,
+                      divisions: 50,
+                      onChanged: (value) {
+                        setState(() {
+                          _shadowDistance = value.round();
+                          _blurRadius = _shadowDistance * 2;
+                        });
+                      },
+                      value: _shadowDistance.toDouble(),
                     ),
-                    Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Text(
-                            "Distance",
-                            style: getTextStyle,
-                          ),
-                        ),
-                        Expanded(
-                          child: SliderTheme(
-                            data: _sliderTheme,
-                            child: Slider(
-                              value: _shadowDistance.toDouble(),
-                              min: 5,
-                              label: "$_shadowDistance",
-                              divisions: 50,
-                              max: 50,
-                              onChanged: (value) {
-                                setState(() {
-                                  _shadowDistance = value.round();
-                                  _blurRadius = _shadowDistance * 2;
-                                });
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
+                    SliderController(
+                      title: "Intensity",
+                      min: 0.01,
+                      max: 0.6,
+                      label: "${_intensity.toStringAsPrecision(2).substring(0, 4)}",
+                      sideLength: _sideLength,
+                      darkMode: _darkMode,
+                      divisions: 59,
+                      onChanged: (value) {
+                        setState(() {
+                          _intensity = value;
+                        });
+                      },
+                      value: _intensity,
                     ),
-                    Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Text(
-                            "Intensity",
-                            style: getTextStyle,
-                          ),
-                        ),
-                        Expanded(
-                          child: SliderTheme(
-                            data: _sliderTheme,
-                            child: Slider(
-                              value: _intensity,
-                              min: 0.01,
-                              max: 0.6,
-                              divisions: 59,
-                              label:
-                                  "${_intensity.toStringAsPrecision(2).substring(0, 4)}",
-                              onChanged: (value) {
-                                setState(() {
-                                  _intensity = value;
-                                });
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Text(
-                            "Blur",
-                            style: getTextStyle,
-                          ),
-                        ),
-                        Expanded(
-                          child: SliderTheme(
-                            data: _sliderTheme,
-                            child: Slider(
-                              value: _blurRadius.toDouble(),
-                              min: 0,
-                              max: 200,
-                              divisions: 100,
-                              label: "$_blurRadius",
-                              onChanged: (value) {
-                                setState(() {
-                                  _blurRadius = value.round();
-                                });
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
+                    SliderController(
+                      title: "Blur",
+                      value: _blurRadius.toDouble(),
+                      min: 0,
+                      max: 200,
+                      divisions: 100,
+                      label: "$_blurRadius",
+                      sideLength: _sideLength,
+                      darkMode: _darkMode,
+                      onChanged: (value) {
+                        setState(() {
+                          _blurRadius = value.round();
+                        });
+                      },
                     ),
                     Row(
                       children: <Widget>[
@@ -411,11 +315,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                 height: 20,
                                 width: 20,
                                 decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(4)),
-                                    color: !_darkMode
-                                        ? HexColor.darkColour
-                                        : Colors.white),
+                                    borderRadius: BorderRadius.all(Radius.circular(4)),
+                                    color: !_darkMode ? HexColor.darkColour : Colors.white),
                               ),
                               _gradient
                                   ? Container(
@@ -423,15 +324,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                       width: 16,
                                       decoration: BoxDecoration(
                                           border: Border.all(
-                                              color: !_darkMode
-                                                  ? Colors.white
-                                                  : Colors.black,
+                                              color: !_darkMode ? Colors.white : Colors.black,
                                               width: 2),
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(4)),
-                                          color: !_darkMode
-                                              ? HexColor.darkColour
-                                              : Colors.white),
+                                          borderRadius: BorderRadius.all(Radius.circular(4)),
+                                          color: !_darkMode ? HexColor.darkColour : Colors.white),
                                     )
                                   : Container()
                             ],
@@ -465,16 +361,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                       },
                                       child: Container(
                                         height: 40,
-                                        color: !_darkMode
-                                            ? HexColor.darkColour
-                                            : Color(0xfff6f5f7),
+                                        color: !_darkMode ? HexColor.darkColour : Color(0xfff6f5f7),
                                         child: Center(
                                             child: Text(
                                           "Concave",
                                           style: TextStyle(
-                                              color: !_darkMode
-                                                  ? Colors.white
-                                                  : Colors.black),
+                                              color: !_darkMode ? Colors.white : Colors.black),
                                         )),
                                       ),
                                     )),
@@ -489,16 +381,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                       },
                                       child: Container(
                                         height: 40,
-                                        color: !_darkMode
-                                            ? Color(0xff344c66)
-                                            : Color(0xffc5c4c6),
+                                        color: !_darkMode ? Color(0xff344c66) : Color(0xffc5c4c6),
                                         child: Center(
                                             child: Text(
                                           "Convex",
                                           style: TextStyle(
-                                              color: !_darkMode
-                                                  ? Colors.white
-                                                  : Colors.black),
+                                              color: !_darkMode ? Colors.white : Colors.black),
                                         )),
                                       ),
                                     )),
@@ -534,46 +422,47 @@ class _MyHomePageState extends State<MyHomePage> {
         BoxShadow(
           blurRadius: _blurRadius.toDouble(),
           color: _getShadowColor1,
-          offset:
-              Offset(_shadowDistance.toDouble(), _shadowDistance.toDouble()),
+          offset: Offset(
+            _shadowDistance.toDouble(),
+            _shadowDistance.toDouble(),
+          ),
         ),
         BoxShadow(
           blurRadius: _blurRadius.toDouble(),
           color: _getShadowColor2,
-          offset:
-              Offset(-_shadowDistance.toDouble(), -_shadowDistance.toDouble()),
+          offset: Offset(
+            -_shadowDistance.toDouble(),
+            -_shadowDistance.toDouble(),
+          ),
         ),
       ];
 
 //
   get _getShadowColor1 => Color.fromARGB(
-      _color.alpha,
-      (_color.red - _intensity * _color.red).round(),
-      (_color.green - _intensity * _color.green).round(),
-      (_color.blue - _intensity * _color.blue).round());
+        _color.alpha,
+        (_color.red - _intensity * _color.red).round(),
+        (_color.green - _intensity * _color.green).round(),
+        (_color.blue - _intensity * _color.blue).round(),
+      );
 
   get _getShadowColor2 => Color.fromARGB(
-      _color.alpha,
-      [255, ((_color.red + _intensity * _color.red).round())].reduce(min),
-      [255, ((_color.green + _intensity * _color.green).round())].reduce(min),
-      [255, ((_color.blue + _intensity * _color.blue).round())].reduce(min));
+        _color.alpha,
+        [255, ((_color.red + _intensity * _color.red).round())].reduce(min),
+        [255, ((_color.green + _intensity * _color.green).round())].reduce(min),
+        [255, ((_color.blue + _intensity * _color.blue).round())].reduce(min),
+      );
 
   get getColor2 => Color.fromARGB(
-      _color.alpha,
-      (_color.red - 0.10 * _color.red).round(),
-      (_color.green - 0.10 * _color.green).round(),
-      (_color.blue - 0.10 * _color.blue).round());
+        _color.alpha,
+        (_color.red - 0.10 * _color.red).round(),
+        (_color.green - 0.10 * _color.green).round(),
+        (_color.blue - 0.10 * _color.blue).round(),
+      );
 
   get getColor1 => Color.fromARGB(
-      _color.alpha,
-      [255, ((_color.red + 0.07 * _color.red).round())].reduce(min),
-      [255, ((_color.green + 0.07 * _color.green).round())].reduce(min),
-      [255, ((_color.blue + 0.07 * _color.blue).round())].reduce(min));
-
-  get _sliderTheme => SliderThemeData(
-      trackHeight: 8,
-      activeTrackColor: _darkMode ? Colors.white : HexColor.darkColour,
-      inactiveTrackColor: _darkMode ? Colors.white : HexColor.darkColour,
-      thumbColor: _darkMode ? Colors.white : HexColor.darkColour,
-      thumbShape: RoundSliderThumbShape(enabledThumbRadius: 8));
+        _color.alpha,
+        [255, ((_color.red + 0.07 * _color.red).round())].reduce(min),
+        [255, ((_color.green + 0.07 * _color.green).round())].reduce(min),
+        [255, ((_color.blue + 0.07 * _color.blue).round())].reduce(min),
+      );
 }
