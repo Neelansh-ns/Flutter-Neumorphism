@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_neumorphism/color_converter.dart';
 import 'package:flutter_neumorphism/view_model/home_view_model.dart';
 import 'package:flutter_neumorphism/widgets/base_model_widget.dart';
@@ -385,6 +386,44 @@ class HomeViewMobile extends BaseModelWidget<HomeViewModel> {
                 color: Colors.red,
                 height: 540,
                 width: 450,
+                child: MarkdownBody(data: '''```dart
+Container(
+    height: ${_sideLength.toDouble()},
+    width: ${_sideLength.toDouble()},
+    decoration: BoxDecoration(
+        color: $_color,
+        boxShadow: [
+        BoxShadow(
+          blurRadius: ${_blurRadius.toDouble()},
+          color: $_getShadowColor1,
+          offset: Offset(
+            ${_shadowDistance.toDouble()},
+            ${_shadowDistance.toDouble()},
+          ),
+        ),
+        BoxShadow(
+          blurRadius: ${_blurRadius.toDouble()},
+          color: $_getShadowColor2,
+          offset: Offset(
+            -${_shadowDistance.toDouble()},
+            -${_shadowDistance.toDouble()},
+          ),
+        ),
+      ];,
+    gradient: ${_gradient ? '''LinearGradient(
+      stops: [0, 1],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors:
+          ${_isConcave ? [getColor1, getColor2] : [getColor2, getColor1]},
+    ),''' : '''null, '''}
+    borderRadius: BorderRadius.all(
+      Radius.circular(
+        ${_radius.toDouble()},
+    )
+  )
+)
+```'''),
               ),
             ],
           ),
