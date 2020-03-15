@@ -1,87 +1,61 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_neumorphism/color_converter.dart';
-import 'package:flutter_neumorphism/widgets/home_view/home_view.dart';
+import 'package:flutter_neumorphism/view_model/home_view_model.dart';
+import 'package:flutter_neumorphism/widgets/base_model_widget.dart';
 import 'package:flutter_neumorphism/widgets/slider_controller.dart';
 
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Neumorphism',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: HomeView(),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key}) : super(key: key);
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _sideLength;
+class HomeViewMobile extends BaseModelWidget<HomeViewModel> {
   Color _color;
+  int _sideLength;
+
   int _shadowDistance;
+
   bool _gradient;
   int _blurRadius;
   int _radius;
+
   double _intensity;
+
   bool _darkMode;
+
   bool _isConcave;
+
   TextEditingController _controller;
-
-  get getTextStyle => TextStyle(
-      fontSize: 20,
-      fontStyle: FontStyle.normal,
-      fontWeight: FontWeight.w300,
-      color: _darkMode ? Colors.white : HexColor.darkColour);
+  HomeViewModel _model;
 
   @override
-  void initState() {
-    super.initState();
-    _sideLength = 300;
-    _color = Color(0xffd6d6d6);
-    _shadowDistance = 30;
-    _gradient = true;
-    _blurRadius = 150;
-    _radius = 50;
-    _intensity = 0.15;
-    _darkMode = false;
-    _isConcave = false;
+  Widget build(BuildContext context, HomeViewModel model) {
+    _color = model.color;
+    _sideLength = model.sideLength;
+    _shadowDistance = model.shadowDistance;
+    _gradient = model.gradient;
+    _blurRadius = model.blurRadius;
+    _radius = model.radius;
+    _intensity = model.intensity;
+    _darkMode = model.darkMode;
+    _isConcave = model.isConcave;
+    _model = model;
     _controller = TextEditingController();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (HexColor.isLight(Color(0xffc6dfd3))) {}
-
-    print(_getShadowColor1);
-    print(_getShadowColor2);
+    _controller.text = _color.toString().substring(10, 16);
 
     return Scaffold(
       backgroundColor: _color,
-      body: Container(
-        color: Colors.transparent,
-        child: StatefulBuilder(
-          builder: (context,StateSetter setState) {
-            return Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Flexible(
-                  flex: 1,
+      body: SingleChildScrollView(
+        child: Container(
+          color: Colors.transparent,
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Container(
+                  constraints: BoxConstraints(
+                      maxHeight: min(MediaQuery.of(context).size.width - 48, 400),
+                      maxWidth: MediaQuery.of(context).size.width),
                   child: Center(
                     child: Container(
                       height: _sideLength.toDouble(),
@@ -102,33 +76,36 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                 ),
-                Flexible(
-                  flex: 1,
-                  child: Container(
-                    height: 540,
-                    width: 450,
-                    decoration: BoxDecoration(
-                        color: _color,
-                        boxShadow: _getBoxShadow,
-                        gradient: _gradient
-                            ? LinearGradient(
-                                stops: [0, 1],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors:
-                                    _isConcave ? [getColor1, getColor2] : [getColor2, getColor1],
-                              )
-                            : null,
-                        borderRadius: BorderRadius.all(Radius.circular(25))),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: _color,
+                      boxShadow: _getBoxShadow,
+                      gradient: _gradient
+                          ? LinearGradient(
+                              stops: [0, 1],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: _isConcave ? [getColor1, getColor2] : [getColor2, getColor1],
+                            )
+                          : null,
+                      borderRadius: BorderRadius.all(Radius.circular(25))),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
                     child: Column(
                       children: <Widget>[
                         Row(
                           children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Text(
-                                "Pick a color",
-                                style: getTextStyle,
+                            Flexible(
+                              child: Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: Text(
+                                  "Pick a color",
+                                  overflow: TextOverflow.ellipsis,
+                                  style: _getTextStyle,
+                                ),
                               ),
                             ),
                             GestureDetector(
@@ -175,12 +152,13 @@ class _MyHomePageState extends State<MyHomePage> {
                               padding: const EdgeInsets.all(16.0),
                               child: Text(
                                 "or",
-                                style: getTextStyle,
+                                style: _getTextStyle,
                               ),
                             ),
                             Container(
                               height: 32,
-                              width: 100,
+//                              width: 80,
+                              constraints: BoxConstraints(maxWidth: 80),
                               decoration: BoxDecoration(boxShadow: [
                                 BoxShadow(
                                     color: HexColor.darkColour,
@@ -201,6 +179,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               ], color: Colors.white),
                               child: TextFormField(
                                 controller: _controller,
+                                onTap: () => _controller.clear(),
                                 onChanged: (value) {
                                   RegExp hexColor = RegExp(r'^#?([0-9a-fA-F]{6})$');
                                   if (hexColor.hasMatch(value)) changeColor(HexColor(value));
@@ -237,12 +216,12 @@ class _MyHomePageState extends State<MyHomePage> {
                           label: "$_sideLength",
                           value: _sideLength.toDouble(),
                           onChanged: (value) {
-                            setState(() {
-                              _sideLength = value.round();
-                              _shadowDistance = [5, (_sideLength / 10).round()].reduce(max);
-                              _blurRadius = _shadowDistance * 2;
-                              _radius = [_radius, (_sideLength / 2).round()].reduce(min);
-                            });
+                            model.updateValues(
+                              sideLength: value.round(),
+                              shadowDistance: [5, (_sideLength / 10).round()].reduce(max),
+                              blurRadius: _shadowDistance * 2,
+                              radius: [_radius, (_sideLength / 2).round()].reduce(min),
+                            );
                           },
                         ),
                         SliderController(
@@ -254,11 +233,9 @@ class _MyHomePageState extends State<MyHomePage> {
                           darkMode: _darkMode,
                           divisions: (_sideLength / 2).round(),
                           onChanged: (value) {
-                            setState(() {
-                              _radius = value.round();
-                            });
+                            model.updateValues(radius: value.round(), sideLength: _sideLength);
                           },
-                          value: _radius.toDouble(),
+                          value: _radius.toDouble().clamp(0, (_sideLength / 2).round().toDouble()),
                         ),
                         SliderController(
                           title: "Distance",
@@ -269,10 +246,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           darkMode: _darkMode,
                           divisions: 50,
                           onChanged: (value) {
-                            setState(() {
-                              _shadowDistance = value.round();
-                              _blurRadius = _shadowDistance * 2;
-                            });
+                            model.updateValues(
+                                shadowDistance: value.round(), blurRadius: _shadowDistance * 2);
                           },
                           value: _shadowDistance.toDouble(),
                         ),
@@ -285,9 +260,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           darkMode: _darkMode,
                           divisions: 59,
                           onChanged: (value) {
-                            setState(() {
-                              _intensity = value;
-                            });
+                            model.updateValues(intensity: value);
                           },
                           value: _intensity,
                         ),
@@ -301,9 +274,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           sideLength: _sideLength,
                           darkMode: _darkMode,
                           onChanged: (value) {
-                            setState(() {
-                              _blurRadius = value.round();
-                            });
+                            model.updateValues(blurRadius: value.round());
                           },
                         ),
                         Row(
@@ -312,13 +283,11 @@ class _MyHomePageState extends State<MyHomePage> {
                               padding: const EdgeInsets.all(16.0),
                               child: Text(
                                 "Gradient background",
-                                style: getTextStyle,
+                                style: _getTextStyle,
                               ),
                             ),
                             GestureDetector(
-                              onTap: () => setState(() {
-                                _gradient = !_gradient;
-                              }),
+                              onTap: () => model.updateValues(gradient: !_gradient),
                               child: Stack(
                                 alignment: Alignment.center,
                                 children: <Widget>[
@@ -355,7 +324,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 padding: const EdgeInsets.all(16.0),
                                 child: Text(
                                   "Shape",
-                                  style: getTextStyle,
+                                  style: _getTextStyle,
                                 ),
                               ),
                               Expanded(
@@ -367,9 +336,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         fit: FlexFit.tight,
                                         child: GestureDetector(
                                           onTap: () {
-                                            setState(() {
-                                              _isConcave = true;
-                                            });
+                                            model.updateValues(isConcave: true);
                                           },
                                           child: Container(
                                             height: 40,
@@ -389,9 +356,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         fit: FlexFit.tight,
                                         child: GestureDetector(
                                           onTap: () {
-                                            setState(() {
-                                              _isConcave = false;
-                                            });
+                                            model.updateValues(isConcave: false);
                                           },
                                           child: Container(
                                             height: 40,
@@ -415,31 +380,53 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                 ),
-                Flexible(
-                  flex: 1,
-                  child: Container(
-                    color: Colors.red,
-                    height: 540,
-                    width: 450,
-                  ),
-                )
-              ],
-            );
-          },
+              ),
+              Container(
+                color: Colors.red,
+                height: 540,
+                width: 450,
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
+  get _getShadowColor1 => Color.fromARGB(
+        _color.alpha,
+        (_color.red - _intensity * _color.red).round(),
+        (_color.green - _intensity * _color.green).round(),
+        (_color.blue - _intensity * _color.blue).round(),
+      );
+
+  get _getShadowColor2 => Color.fromARGB(
+      _color.alpha,
+      min(255, ((_color.red + _intensity * _color.red).round())),
+      min(255, ((_color.green + _intensity * _color.green).round())),
+      min(255, ((_color.blue + _intensity * _color.blue).round())));
+
+  get getColor2 => Color.fromARGB(
+        _color.alpha,
+        (_color.red - 0.10 * _color.red).round(),
+        (_color.green - 0.10 * _color.green).round(),
+        (_color.blue - 0.10 * _color.blue).round(),
+      );
+
+  get getColor1 => Color.fromARGB(
+      _color.alpha,
+      min(255, ((_color.red + 0.07 * _color.red).round())),
+      min(255, ((_color.green + 0.07 * _color.green).round())),
+      min(255, ((_color.blue + 0.07 * _color.blue).round())));
+
   void changeColor(Color color) {
-    setState(() {
-      _color = color;
-      _controller.text = color.toString().substring(10, 16);
-      if (HexColor.isLight(color))
-        _darkMode = true;
-      else
-        _darkMode = false;
-    });
+    bool _darkMode;
+    print(color);
+    if (HexColor.isLight(color))
+      _darkMode = true;
+    else
+      _darkMode = false;
+    _model.updateValues(color: color, darkMode: _darkMode);
   }
 
   get _getBoxShadow => [
@@ -461,32 +448,9 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ];
 
-//
-  get _getShadowColor1 => Color.fromARGB(
-        _color.alpha,
-        (_color.red - _intensity * _color.red).round(),
-        (_color.green - _intensity * _color.green).round(),
-        (_color.blue - _intensity * _color.blue).round(),
-      );
-
-  get _getShadowColor2 => Color.fromARGB(
-        _color.alpha,
-        [255, ((_color.red + _intensity * _color.red).round())].reduce(min),
-        [255, ((_color.green + _intensity * _color.green).round())].reduce(min),
-        [255, ((_color.blue + _intensity * _color.blue).round())].reduce(min),
-      );
-
-  get getColor2 => Color.fromARGB(
-        _color.alpha,
-        (_color.red - 0.10 * _color.red).round(),
-        (_color.green - 0.10 * _color.green).round(),
-        (_color.blue - 0.10 * _color.blue).round(),
-      );
-
-  get getColor1 => Color.fromARGB(
-        _color.alpha,
-        [255, ((_color.red + 0.07 * _color.red).round())].reduce(min),
-        [255, ((_color.green + 0.07 * _color.green).round())].reduce(min),
-        [255, ((_color.blue + 0.07 * _color.blue).round())].reduce(min),
-      );
+  get _getTextStyle => TextStyle(
+      fontSize: 20,
+      fontStyle: FontStyle.normal,
+      fontWeight: FontWeight.w300,
+      color: _darkMode ? Colors.white : HexColor.darkColour);
 }

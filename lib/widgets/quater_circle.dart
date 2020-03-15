@@ -1,7 +1,7 @@
+import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
 
 enum CircleAlignment {
   topLeft,

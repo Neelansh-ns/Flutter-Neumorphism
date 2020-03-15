@@ -26,6 +26,8 @@ dependencies:
 
 dev_dependencies:
   flutter_colorpicker: ^0.2.6
+  responsive_builder:
+  provider:
   flutter_test:
     sdk: flutter
 
