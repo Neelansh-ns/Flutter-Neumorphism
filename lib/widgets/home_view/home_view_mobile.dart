@@ -28,10 +28,10 @@ class HomeViewMobile extends BaseModelWidget<HomeViewModel> {
 
   TextEditingController _controller;
   HomeViewModel _model;
+  final scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context, HomeViewModel model) {
-    final key = new GlobalKey<ScaffoldState>();
     _color = model.color;
     _sideLength = model.sideLength;
     _shadowDistance = model.shadowDistance;
@@ -46,7 +46,7 @@ class HomeViewMobile extends BaseModelWidget<HomeViewModel> {
     _controller.text = _color.toString().substring(10, 16);
 
     return Scaffold(
-      key: key,
+      key: scaffoldKey,
       backgroundColor: _color,
       body: SingleChildScrollView(
         child: Container(
@@ -132,7 +132,6 @@ class HomeViewMobile extends BaseModelWidget<HomeViewModel> {
                               child: Container(
                                 height: 32,
                                 width: 32,
-//                          color: _color,
                                 decoration: BoxDecoration(boxShadow: [
                                   BoxShadow(
                                       color: HexColor.darkColour,
@@ -162,7 +161,6 @@ class HomeViewMobile extends BaseModelWidget<HomeViewModel> {
                             ),
                             Container(
                               height: 32,
-//                              width: 80,
                               constraints: BoxConstraints(maxWidth: 80),
                               decoration: BoxDecoration(boxShadow: [
                                 BoxShadow(
@@ -392,7 +390,7 @@ class HomeViewMobile extends BaseModelWidget<HomeViewModel> {
                   child: GestureDetector(
                     onTap: () {
                       _copyToClipboardHack(dartCode);
-                      key.currentState.showSnackBar(new SnackBar(
+                      scaffoldKey.currentState.showSnackBar(new SnackBar(
                         content: new Text("Copied to Clipboard"),
                       ));
                     },

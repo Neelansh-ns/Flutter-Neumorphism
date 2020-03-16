@@ -28,10 +28,10 @@ class HomeViewDesktop extends BaseModelWidget<HomeViewModel> {
 
   TextEditingController _controller;
   HomeViewModel _model;
+  final scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context, HomeViewModel model) {
-    final key = new GlobalKey<ScaffoldState>();
     _color = model.color;
     _sideLength = model.sideLength;
     _shadowDistance = model.shadowDistance;
@@ -45,7 +45,7 @@ class HomeViewDesktop extends BaseModelWidget<HomeViewModel> {
     _controller = TextEditingController();
     _controller.text = _color.toString().substring(10, 16);
     return Scaffold(
-      key: key,
+      key: scaffoldKey,
       backgroundColor: _color,
       body: Center(
         child: Container(
@@ -123,7 +123,6 @@ class HomeViewDesktop extends BaseModelWidget<HomeViewModel> {
                             child: Container(
                               height: 32,
                               width: 32,
-//                          color: _color,
                               decoration: BoxDecoration(boxShadow: [
                                 BoxShadow(
                                     color: HexColor.darkColour,
@@ -369,7 +368,7 @@ class HomeViewDesktop extends BaseModelWidget<HomeViewModel> {
                 child: GestureDetector(
                   onTap: () {
                     _copyToClipboardHack(dartCode);
-                    key.currentState.showSnackBar(new SnackBar(
+                    scaffoldKey.currentState.showSnackBar(new SnackBar(
                       content: new Text("Copied to Clipboard"),
                     ));
                   },
@@ -385,7 +384,6 @@ class HomeViewDesktop extends BaseModelWidget<HomeViewModel> {
                               child: Container(
                                 alignment: Alignment.center,
                                 height: 32,
-//                          width: 32,
                                 decoration: BoxDecoration(boxShadow: [
                                   BoxShadow(
                                       color: HexColor.darkColour,
@@ -436,44 +434,6 @@ class HomeViewDesktop extends BaseModelWidget<HomeViewModel> {
           ),
         ),
         shrinkWrap: true,
-//        data: '''```dart
-//Container(
-//    height: ${_sideLength.toDouble()},
-//    width: ${_sideLength.toDouble()},
-//    decoration: BoxDecoration(
-//        color: $_color,
-//        boxShadow: [
-//        BoxShadow(
-//          blurRadius: ${_blurRadius.toDouble()},
-//          color: $_getShadowColor1,
-//          offset: Offset(
-//            ${_shadowDistance.toDouble()},
-//            ${_shadowDistance.toDouble()},
-//          ),
-//        ),
-//        BoxShadow(
-//          blurRadius: ${_blurRadius.toDouble()},
-//          color: $_getShadowColor2,
-//          offset: Offset(
-//            -${_shadowDistance.toDouble()},
-//            -${_shadowDistance.toDouble()},
-//          ),
-//        ),
-//      ];,
-//    gradient: ${_gradient ? '''LinearGradient(
-//      stops: [0, 1],
-//      begin: Alignment.topLeft,
-//      end: Alignment.bottomRight,
-//      colors:
-//          ${_isConcave ? [getColor1, getColor2] : [getColor2, getColor1]},
-//    ),''' : '''null, '''}
-//    borderRadius: BorderRadius.all(
-//      Radius.circular(
-//        ${_radius.toDouble()},
-//    )
-//  )
-//)
-//```''');
         data: '''```dart
   $dartCode''');
   }
