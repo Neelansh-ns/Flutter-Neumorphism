@@ -365,21 +365,22 @@ class HomeViewDesktop extends BaseModelWidget<HomeViewModel> {
               ),
               Flexible(
                 flex: 1,
-                child: GestureDetector(
-                  onTap: () {
-                    _copyToClipboardHack(dartCode);
-                    scaffoldKey.currentState.showSnackBar(new SnackBar(
-                      content: new Text("Copied to Clipboard"),
-                    ));
-                  },
-                  child: Center(
-                    child: Container(
-                        width: 450,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: <Widget>[
-                            Padding(
+                child: Center(
+                  child: Container(
+                      width: 450,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          buildMarkdown(),
+                          GestureDetector(
+                            onTap: () {
+                              _copyToClipboardHack(dartCode);
+                              scaffoldKey.currentState.showSnackBar(new SnackBar(
+                                content: new Text("Copied to Clipboard"),
+                              ));
+                            },
+                            child: Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 24),
                               child: Container(
                                 alignment: Alignment.center,
@@ -409,10 +410,9 @@ class HomeViewDesktop extends BaseModelWidget<HomeViewModel> {
                                 ),
                               ),
                             ),
-                            buildMarkdown(),
-                          ],
-                        )),
-                  ),
+                          ),
+                        ],
+                      )),
                 ),
               ),
             ],
@@ -430,7 +430,7 @@ class HomeViewDesktop extends BaseModelWidget<HomeViewModel> {
           codeblockPadding: EdgeInsets.all(24),
           codeblockDecoration: BoxDecoration(
             color: _color,
-            borderRadius: BorderRadius.vertical(bottom: Radius.circular(25)),
+            boxShadow: _getCodeBoxShadow,
           ),
         ),
         shrinkWrap: true,
@@ -492,6 +492,27 @@ class HomeViewDesktop extends BaseModelWidget<HomeViewModel> {
           ),
         ),
       ];
+
+  get _getCodeBoxShadow => [
+        BoxShadow(
+          blurRadius: 18,
+          color: _getShadowColor1,
+          offset: Offset(
+            9,
+            9,
+          ),
+        ),
+        BoxShadow(
+          blurRadius: 18,
+          color: _getShadowColor2,
+          offset: Offset(
+            -9,
+            -9,
+          ),
+        ),
+      ];
+
+
 
   get _getTextStyle => TextStyle(
       fontSize: 20,

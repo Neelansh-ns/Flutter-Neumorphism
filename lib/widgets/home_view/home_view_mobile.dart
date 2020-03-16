@@ -384,59 +384,56 @@ class HomeViewMobile extends BaseModelWidget<HomeViewModel> {
                   ),
                 ),
               ),
-              Container(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      _copyToClipboardHack(dartCode);
-                      scaffoldKey.currentState.showSnackBar(new SnackBar(
-                        content: new Text("Copied to Clipboard"),
-                      ));
-                    },
-                    child: Center(
-                      child: Container(
-                          width: 450,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 24),
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  height: 32,
-//                          width: 32,
-                                  decoration: BoxDecoration(boxShadow: [
-                                    BoxShadow(
-                                        color: HexColor.darkColour,
-                                        offset: Offset(2, 0),
-                                        blurRadius: 5),
-                                    BoxShadow(
-                                        color: HexColor.darkColour,
-                                        offset: Offset(-2, 0),
-                                        blurRadius: 5),
-                                    BoxShadow(
-                                        color: HexColor.darkColour,
-                                        offset: Offset(0, 2),
-                                        blurRadius: 5),
-                                    BoxShadow(
-                                        color: HexColor.darkColour,
-                                        offset: Offset(0, -2),
-                                        blurRadius: 5),
-                                  ], color: _color),
-                                  child: Text(
-                                    'COPY',
-                                    style: _getTextStyle,
-                                    textAlign: TextAlign.center,
-                                  ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 64),
+                child: Center(
+                  child: Container(
+                      width: 450,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          buildMarkdown(),
+                          GestureDetector(
+                            onTap: () {
+                              _copyToClipboardHack(dartCode);
+                              scaffoldKey.currentState.showSnackBar(new SnackBar(
+                                content: new Text("Copied to Clipboard"),
+                              ));
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 24),
+                              child: Container(
+                                alignment: Alignment.center,
+                                height: 32,
+                                decoration: BoxDecoration(boxShadow: [
+                                  BoxShadow(
+                                      color: HexColor.darkColour,
+                                      offset: Offset(2, 0),
+                                      blurRadius: 5),
+                                  BoxShadow(
+                                      color: HexColor.darkColour,
+                                      offset: Offset(-2, 0),
+                                      blurRadius: 5),
+                                  BoxShadow(
+                                      color: HexColor.darkColour,
+                                      offset: Offset(0, 2),
+                                      blurRadius: 5),
+                                  BoxShadow(
+                                      color: HexColor.darkColour,
+                                      offset: Offset(0, -2),
+                                      blurRadius: 5),
+                                ], color: _color),
+                                child: Text(
+                                  'COPY',
+                                  style: _getTextStyle,
+                                  textAlign: TextAlign.center,
                                 ),
                               ),
-                              buildMarkdown(),
-                            ],
-                          )),
-                    ),
-                  ),
+                            ),
+                          ),
+                        ],
+                      )),
                 ),
               ),
             ],
@@ -454,7 +451,7 @@ class HomeViewMobile extends BaseModelWidget<HomeViewModel> {
           codeblockPadding: EdgeInsets.all(24),
           codeblockDecoration: BoxDecoration(
             color: _color,
-            borderRadius: BorderRadius.vertical(bottom: Radius.circular(25)),
+            boxShadow: _getCodeBoxShadow
           ),
         ),
         shrinkWrap: true,
@@ -516,6 +513,25 @@ class HomeViewMobile extends BaseModelWidget<HomeViewModel> {
           ),
         ),
       ];
+  get _getCodeBoxShadow => [
+    BoxShadow(
+      blurRadius: 18,
+      color: _getShadowColor1,
+      offset: Offset(
+        9,
+        9,
+      ),
+    ),
+    BoxShadow(
+      blurRadius: 18,
+      color: _getShadowColor2,
+      offset: Offset(
+        -9,
+        -9,
+      ),
+    ),
+  ];
+
 
   get _getTextStyle => TextStyle(
       fontSize: 20,
