@@ -1,7 +1,10 @@
+import 'dart:html';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_neumorphism/color_converter.dart';
 import 'package:flutter_neumorphism/view_model/home_view_model.dart';
 import 'package:flutter_neumorphism/widgets/base_model_widget.dart';
@@ -28,6 +31,7 @@ class HomeViewDesktop extends BaseModelWidget<HomeViewModel> {
 
   @override
   Widget build(BuildContext context, HomeViewModel model) {
+    final key = new GlobalKey<ScaffoldState>();
     _color = model.color;
     _sideLength = model.sideLength;
     _shadowDistance = model.shadowDistance;
@@ -41,6 +45,7 @@ class HomeViewDesktop extends BaseModelWidget<HomeViewModel> {
     _controller = TextEditingController();
     _controller.text = _color.toString().substring(10, 16);
     return Scaffold(
+      key: key,
       backgroundColor: _color,
       body: Center(
         child: Container(
@@ -359,11 +364,118 @@ class HomeViewDesktop extends BaseModelWidget<HomeViewModel> {
                   ),
                 ),
               ),
+              Flexible(
+                flex: 1,
+                child: GestureDetector(
+                  onTap: () {
+                    _copyToClipboardHack(dartCode);
+                    key.currentState.showSnackBar(new SnackBar(
+                      content: new Text("Copied to Clipboard"),
+                    ));
+                  },
+                  child: Center(
+                    child: Container(
+                        width: 450,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 24),
+                              child: Container(
+                                alignment: Alignment.center,
+                                height: 32,
+//                          width: 32,
+                                decoration: BoxDecoration(boxShadow: [
+                                  BoxShadow(
+                                      color: HexColor.darkColour,
+                                      offset: Offset(2, 0),
+                                      blurRadius: 5),
+                                  BoxShadow(
+                                      color: HexColor.darkColour,
+                                      offset: Offset(-2, 0),
+                                      blurRadius: 5),
+                                  BoxShadow(
+                                      color: HexColor.darkColour,
+                                      offset: Offset(0, 2),
+                                      blurRadius: 5),
+                                  BoxShadow(
+                                      color: HexColor.darkColour,
+                                      offset: Offset(0, -2),
+                                      blurRadius: 5),
+                                ], color: _color),
+                                child: Text(
+                                  'COPY',
+                                  style: _getTextStyle,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                            buildMarkdown(),
+                          ],
+                        )),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Markdown buildMarkdown() {
+    return Markdown(
+        physics: NeverScrollableScrollPhysics(),
+        styleSheet: MarkdownStyleSheet(
+          code: _getCodeTextStyle,
+          codeblockPadding: EdgeInsets.all(24),
+          codeblockDecoration: BoxDecoration(
+            color: _color,
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(25)),
+          ),
+        ),
+        shrinkWrap: true,
+//        data: '''```dart
+//Container(
+//    height: ${_sideLength.toDouble()},
+//    width: ${_sideLength.toDouble()},
+//    decoration: BoxDecoration(
+//        color: $_color,
+//        boxShadow: [
+//        BoxShadow(
+//          blurRadius: ${_blurRadius.toDouble()},
+//          color: $_getShadowColor1,
+//          offset: Offset(
+//            ${_shadowDistance.toDouble()},
+//            ${_shadowDistance.toDouble()},
+//          ),
+//        ),
+//        BoxShadow(
+//          blurRadius: ${_blurRadius.toDouble()},
+//          color: $_getShadowColor2,
+//          offset: Offset(
+//            -${_shadowDistance.toDouble()},
+//            -${_shadowDistance.toDouble()},
+//          ),
+//        ),
+//      ];,
+//    gradient: ${_gradient ? '''LinearGradient(
+//      stops: [0, 1],
+//      begin: Alignment.topLeft,
+//      end: Alignment.bottomRight,
+//      colors:
+//          ${_isConcave ? [getColor1, getColor2] : [getColor2, getColor1]},
+//    ),''' : '''null, '''}
+//    borderRadius: BorderRadius.all(
+//      Radius.circular(
+//        ${_radius.toDouble()},
+//    )
+//  )
+//)
+//```''');
+        data: '''```dart
+  $dartCode''');
   }
 
   get _getShadowColor1 => Color.fromARGB(
@@ -426,4 +538,67 @@ class HomeViewDesktop extends BaseModelWidget<HomeViewModel> {
       fontStyle: FontStyle.normal,
       fontWeight: FontWeight.w300,
       color: _darkMode ? Colors.white : HexColor.darkColour);
+
+  get _getCodeTextStyle => TextStyle(
+      fontFamily: "monospace",
+      fontSize: 12,
+      fontStyle: FontStyle.normal,
+      fontWeight: FontWeight.w300,
+      color: _darkMode ? Colors.white : HexColor.darkColour);
+
+  String get dartCode => '''
+Container(
+    height: ${_sideLength.toDouble()},
+    width: ${_sideLength.toDouble()},
+    decoration: BoxDecoration(
+        color: $_color,
+        boxShadow: [
+        BoxShadow(
+          blurRadius: ${_blurRadius.toDouble()},
+          color: $_getShadowColor1,
+          offset: Offset(
+            ${_shadowDistance.toDouble()},
+            ${_shadowDistance.toDouble()},
+          ),
+        ),
+        BoxShadow(
+          blurRadius: ${_blurRadius.toDouble()},
+          color: $_getShadowColor2,
+          offset: Offset(
+            -${_shadowDistance.toDouble()},
+            -${_shadowDistance.toDouble()},
+          ),
+        ),
+      ],
+    gradient: ${_gradient ? '''LinearGradient(
+      stops: [0, 1],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors:
+          ${_isConcave ? [getColor1, getColor2] : [getColor2, getColor1]},
+    ),''' : '''null, '''}
+    borderRadius: BorderRadius.all(
+      Radius.circular(
+        ${_radius.toDouble()},
+      )
+    )
+  )
+)''';
+
+  //workaround for copying to Clipboard in flutter web
+  bool _copyToClipboardHack(String text) {
+    final textArea = new TextAreaElement();
+    document.body.append(textArea);
+    textArea.style.border = '0';
+    textArea.style.margin = '0';
+    textArea.style.padding = '0';
+    textArea.style.opacity = '0';
+    textArea.style.position = 'absolute';
+    textArea.readOnly = true;
+    textArea.value = text;
+    textArea.select();
+    final result = document.execCommand('copy');
+    textArea.remove();
+    return result;
+  }
 }

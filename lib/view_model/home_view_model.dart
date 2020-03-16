@@ -13,7 +13,6 @@ class HomeViewModel extends ChangeNotifier {
   double intensity;
   bool darkMode;
   bool isConcave;
-  TextEditingController controller;
 
   void init() {
     print("init");
@@ -28,7 +27,6 @@ class HomeViewModel extends ChangeNotifier {
     intensity = 0.15;
     darkMode = false;
     isConcave = false;
-    controller = TextEditingController();
     notifyListeners();
   }
 
@@ -48,15 +46,15 @@ class HomeViewModel extends ChangeNotifier {
     bool darkMode,
     bool isConcave,
   }) {
-    if(sideLength != null) this.sideLength = sideLength;
-    if(color != null)this.color = color;
-    if(shadowDistance != null)this.shadowDistance = shadowDistance;
-    if(gradient != null)this.gradient = gradient;
-    if(blurRadius != null) this.blurRadius = blurRadius;
-    if(radius != null) this.radius = radius;
-    if(intensity != null)this.intensity = intensity;
-    if(darkMode != null)this.darkMode = darkMode;
-    if(isConcave != null)this.isConcave = isConcave;
+    if (sideLength != null) this.sideLength = sideLength;
+    if (color != null) this.color = color;
+    if (shadowDistance != null) this.shadowDistance = shadowDistance;
+    if (gradient != null) this.gradient = gradient;
+    if (blurRadius != null) this.blurRadius = blurRadius;
+    if (radius != null) this.radius = radius;
+    if (intensity != null) this.intensity = intensity;
+    if (darkMode != null) this.darkMode = darkMode;
+    if (isConcave != null) this.isConcave = isConcave;
     notifyListeners();
   }
 }
