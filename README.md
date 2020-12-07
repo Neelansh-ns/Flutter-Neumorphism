@@ -14,7 +14,7 @@ Let us start with the root of the word “Neumorphic”. It is a combination of 
 
 ## Features
 
-Neumorphic Flutter widgets code generator that will help with colors, gradients and shadows to adapt this new design trend or discover its posibilities.
+Neumorphic Flutter widgets code generator that will help with colors, gradients, and shadows to adapt to this new design trend or discover its possibilities.
 
 ![](images/image1.png)
 
