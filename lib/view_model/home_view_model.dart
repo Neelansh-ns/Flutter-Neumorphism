@@ -1,60 +1,45 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_neumorphism/color_converter.dart';
 
 class HomeViewModel extends ChangeNotifier {
-  String text = 'default';
-  int ctr;
+  int sideLength = 300;
+  int shadowDistance = 30;
+  bool gradient = true;
+  int blurRadius = 150;
+  int radius = 50;
+  double intensity = 0.15;
+  bool isConcave = false;
 
-  int sideLength;
-  Color color;
-  int shadowDistance;
-  bool gradient;
-  int blurRadius;
-  int radius;
-  double intensity;
-  bool darkMode;
-  bool isConcave;
+  Color _color = const Color(0xffe1c1c1);
+  bool _darkMode = false;
 
-  void init() {
-    print("init");
-    ctr = 0;
-    text = 'Neelansh';
-    sideLength = 300;
-    color = Color(0xffd6d6d6);
-    shadowDistance = 30;
-    gradient = true;
-    blurRadius = 150;
-    radius = 50;
-    intensity = 0.15;
-    darkMode = false;
-    isConcave = false;
-    notifyListeners();
-  }
+  Color get color => _color;
+  bool get darkMode => _darkMode;
 
-  void update() {
-    text = " ${ctr++}";
+  set color(Color value) {
+    _color = value;
+    _darkMode = HexColor.isLight(value);
     notifyListeners();
   }
 
   void updateValues({
-    int sideLength,
-    Color color,
-    int shadowDistance,
-    bool gradient,
-    int blurRadius,
-    int radius,
-    double intensity,
-    bool darkMode,
-    bool isConcave,
+    int? sideLength,
+    Color? color,
+    int? shadowDistance,
+    bool? gradient,
+    int? blurRadius,
+    int? radius,
+    double? intensity,
+    bool? isConcave,
   }) {
-    if (sideLength != null) this.sideLength = sideLength;
+    this.sideLength = sideLength ?? this.sideLength;
     if (color != null) this.color = color;
-    if (shadowDistance != null) this.shadowDistance = shadowDistance;
-    if (gradient != null) this.gradient = gradient;
-    if (blurRadius != null) this.blurRadius = blurRadius;
-    if (radius != null) this.radius = radius;
-    if (intensity != null) this.intensity = intensity;
-    if (darkMode != null) this.darkMode = darkMode;
-    if (isConcave != null) this.isConcave = isConcave;
+    this.shadowDistance = shadowDistance ?? this.shadowDistance;
+    this.gradient = gradient ?? this.gradient;
+    this.blurRadius = blurRadius ?? this.blurRadius;
+    this.radius = radius ?? this.radius;
+    this.intensity = intensity ?? this.intensity;
+    this.isConcave = isConcave ?? this.isConcave;
     notifyListeners();
   }
 }
